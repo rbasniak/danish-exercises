@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Danish Practice</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <style>
+    .home-header {
+      padding: 28px 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .home-greeting {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .home-title {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .coming-soon {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="home-header">
+    <span class="home-greeting">🇩🇰 Let's practice</span>
+    <h1 class="home-title">Danish</h1>
+  </div>
+
+  <p class="intro-text">Choose a subject to practice. More subjects coming soon!</p>
+
+  <div class="cards-grid">
+
+    <a href="verbs-config.html" class="subject-card">
+      <span class="card-emoji">📝</span>
+      <div class="card-title">Verbs</div>
+      <div class="card-desc">
+        Master the top 100 most used Danish verbs — translate, identify and
+        classify them by conjugation group.
+      </div>
+      <span class="card-badge">Top 100</span>
+    </a>
+
+    <div class="subject-card coming-soon" title="Coming soon">
+      <span class="card-emoji">🔠</span>
+      <div class="card-title">Nouns</div>
+      <div class="card-desc">
+        Learn common Danish nouns with their genders (en / et) and plural forms.
+      </div>
+      <span class="card-badge" style="background:rgba(148,163,184,0.12);color:var(--text-dim)">Coming soon</span>
+    </div>
+
+    <div class="subject-card coming-soon" title="Coming soon">
+      <span class="card-emoji">💬</span>
+      <div class="card-title">Phrases</div>
+      <div class="card-desc">
+        Everyday Danish phrases and expressions for real-life conversations.
+      </div>
+      <span class="card-badge" style="background:rgba(148,163,184,0.12);color:var(--text-dim)">Coming soon</span>
+    </div>
+
+  </div>
+  <script>twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });</script>
+</body>
+</html>
