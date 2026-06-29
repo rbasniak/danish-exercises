@@ -643,3 +643,65 @@ img.emoji {
   .question-text { font-size: 34px; }
   .answer-btn { font-size: 17px; }
 }
+
+/* ── Numbers Exercise ─────────────────────────────────────────── */
+
+/* Big audio play button in question area */
+.audio-play-btn {
+  width: 96px;
+  height: 96px;
+  font-size: 44px;
+  margin: 4px 0 0;
+}
+
+.audio-tap-hint {
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 0.3px;
+}
+
+/* Large digit display in question area */
+.digit-display {
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  text-align: center;
+  line-height: 1.1;
+  padding: 4px 0 8px;
+}
+
+/* Answer grid: numeral options (2×2) */
+.answer-grid.num-options .answer-btn {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+/* Answer grid: written-form options (single column) */
+.answer-grid.written-options {
+  grid-template-columns: 1fr;
+}
+.answer-grid.written-options .answer-btn {
+  font-size: 17px;
+  min-height: 64px;
+  text-align: center;
+}
+
+/* Feedback: large numeral */
+.feedback-number {
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: var(--text);
+}
+
+/* Feedback: written Danish form */
+.feedback-danish {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  word-break: break-word;
+  max-width: 300px;
+}

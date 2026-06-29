@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Numbers Exercise | Danish Practice</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- ── Exercise View ──────────────────────────────────────── -->
+  <div id="exercise-view">
+
+    <!-- Progress header -->
+    <div class="progress-header">
+      <button class="back-btn" onclick="confirmBack()" aria-label="Back">←</button>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <span class="progress-text" id="progress-text">1 / 10</span>
+    </div>
+
+    <!-- Timer bar -->
+    <div class="timer-bar" id="timer-bar" style="display:none">
+      <div class="timer-fill" id="timer-fill" style="width:100%"></div>
+    </div>
+
+    <!-- Question card -->
+    <div class="question-card">
+      <div class="question-prompt" id="question-prompt"></div>
+
+      <!-- Audio type: big play button -->
+      <div id="audio-question-area" style="display:none; flex-direction:column; align-items:center; gap:12px; padding:8px 0 4px">
+        <button id="audio-play-btn" class="audio-play-btn tts-btn" onclick="playQuestionAudio()" aria-label="Play number">
+          🔊
+        </button>
+        <span class="audio-tap-hint">Tap to hear again</span>
+      </div>
+
+      <!-- Digit type: large number -->
+      <div id="digit-question-area" style="display:none">
+        <div class="digit-display" id="digit-display"></div>
+      </div>
+    </div>
+
+    <!-- Answer buttons -->
+    <div class="answer-grid" id="answer-grid"></div>
+
+  </div><!-- /exercise-view -->
+
+  <!-- ── Feedback Overlay ────────────────────────────────────── -->
+  <div class="feedback-overlay hidden" id="feedback-overlay" onclick="nextQuestion()">
+    <div class="feedback-icon"     id="feedback-icon"></div>
+    <div class="feedback-title"    id="feedback-title"></div>
+    <div class="feedback-subtitle" id="feedback-subtitle"></div>
+
+    <!-- Always show numeral + Danish text -->
+    <div class="feedback-number"   id="feedback-number"></div>
+    <div class="feedback-danish"   id="feedback-danish"></div>
+
+    <!-- TTS button -->
+    <button id="tts-btn" class="tts-btn" onclick="event.stopPropagation(); playFeedbackTTS()" aria-label="Hear pronunciation">
+      🔊
+    </button>
+
+    <div class="feedback-tap">Tap anywhere else to continue</div>
+  </div>
+
+  <!-- ── Summary View ───────────────────────────────────────── -->
+  <div id="summary-view" style="display:none">
+
+    <div class="header" style="padding-top:20px">
+      <a href="numbers-config.html" class="back-btn" aria-label="Back">←</a>
+      <div class="page-title">Results</div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px;padding:24px 0 40px">
+
+      <div class="score-circle">
+        <span class="score-number" id="score-number">0</span>
+        <span class="score-total"  id="score-total">/ 10</span>
+      </div>
+
+      <div class="score-pct" id="score-pct">0%</div>
+      <div class="summary-msg" id="summary-msg"></div>
+
+      <div class="summary-actions">
+        <button class="start-btn" onclick="playAgain()">Play Again →</button>
+        <a href="numbers-config.html" class="btn-secondary">Change Settings</a>
+        <a href="index.html"          class="btn-secondary">Home</a>
+      </div>
+
+    </div>
+  </div><!-- /summary-view -->
+
+  <!-- Data + Logic -->
+  <script src="js/numbers-data.js"></script>
+  <script src="js/numbers-exercise.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      initNumbersExercise();
+      twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+    });
+
+    function confirmBack() {
+      if (confirm('Leave this exercise? Your progress will be lost.')) {
+        window.location.href = 'numbers-config.html';
+      }
+    }
+
+    function playAgain() {
+      window.location.href = 'numbers-exercise.html';
+    }
+  </script>
+</body>
+</html>
