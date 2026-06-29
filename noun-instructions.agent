@@ -1,0 +1,160 @@
+# Noun Data Instructions for Agents
+
+## Purpose
+This file tells you exactly how to add new Danish nouns to the Danish Practice app and where to verify correctness.
+
+---
+
+## The only file you need to edit
+
+**`js/nouns-data.js`** — a single JavaScript array called `NOUNS` with one object per noun.
+
+Do NOT touch any HTML or other JS files unless explicitly asked.
+
+---
+
+## Data Structure
+
+Each noun entry must have exactly these fields:
+
+```js
+{
+  id:          <number>,          // next sequential integer (max current id + 1)
+  category:    <string>,          // see categories below
+  da:          <string>,          // indefinite singular WITHOUT article (e.g. 'hund', not 'en hund')
+  meaning:     <string>,          // English translation
+  gender:      'en' | 'et',
+  definiteSg:  <string>,          // definite singular form
+  plural:      <string | null>,   // indefinite plural; null when pluralClass is null
+  definitePl:  <string | null>,   // definite plural; null when pluralClass is null
+  pluralClass: 'er' | 'e' | 'zero' | 'umlaut' | 'irregular' | null,
+}
+```
+
+---
+
+## Categories
+
+| value        | meaning                  |
+|-------------|--------------------------|
+| `'animals'`  | dyr                      |
+| `'food'`     | mad og drikke            |
+| `'body'`     | krop og helbred          |
+| `'home'`     | hjem og genstande        |
+| `'nature'`   | natur                    |
+| `'people'`   | mennesker og relationer  |
+| `'work'`     | arbejde og steder        |
+| `'time'`     | tid og kalender          |
+| `'abstract'` | abstrakt/almindelige     |
+
+---
+
+## pluralClass Values
+
+| value        | meaning                                                                      | examples                                    |
+|-------------|------------------------------------------------------------------------------|---------------------------------------------|
+| `'er'`       | Adds **-er** (with consonant doubling if needed)                              | bil→biler, blomst→blomster, kat→katte       |
+| `'e'`        | Adds **-e** (with consonant doubling if needed)                               | hund→hunde, dag→dage, væg→vægge             |
+| `'zero'`     | Unchanged plural — singular = plural                                         | fisk→fisk, år→år, æg→æg, glas→glas         |
+| `'umlaut'`   | Stem vowel changes (± suffix): a→æ, o→ø, å→æ                                | mand→mænd, barn→børn, bog→bøger, ko→køer   |
+| `'irregular'`| Contracted/syncopated forms, or Latin -um words                              | tiger→tigre, søster→søstre, museum→museer  |
+| `null`       | No meaningful plural: days of week, months, mass nouns (mælk, vand, kød)     | mandag, januar, mælk → plural: null         |
+
+When `pluralClass` is `null`, also set both `plural` and `definitePl` to `null`.
+
+---
+
+## Form Derivation Rules
+
+### Definite Singular
+
+**en-nouns** → noun + `-en`
+- Normal: hund → hunden, dag → dagen
+- Consonant doubling (short stressed vowel + single consonant): kat → katten, ven → vennen, ryg → ryggen
+- Words ending in unstressed `-el` drop the `e` (syncopation): kartoffel → kartoflen
+
+**et-nouns** → noun + `-et`
+- Normal: hus → huset, træ → træet
+- Consonant doubling: glas → glasset, æg → ægget
+- Latin `-um` words: drop `-um` then add `-et` → museum → museet, jubilæum → jubilæet
+
+### Indefinite Plural
+
+Learn per noun — no universal rule. Use the reference sources below.
+
+### Definite Plural (100% regular — derived from indefinite plural)
+
+- Plural ends in **-er** or **-e** → add **-ne**: biler → bilerne, hunde → hundene, bøger → bøgerne
+- Plural ends in a **consonant** → add **-ene**: år → årene, børn → børnene, fisk → fiskene, mænd → mændene
+- Zero-plural nouns follow the consonant rule: glas → glassene, sten → stenene
+
+---
+
+## Where to Verify Noun Forms
+
+Check in this order:
+
+1. **Den Danske Ordbog (primary authority)**
+   URL pattern: `https://ordnet.dk/ddo/ordbog/<noun>`
+   Example: `https://ordnet.dk/ddo/ordbog/hund`
+   Shows full inflection table with all four forms.
+
+2. **Wiktionary (good for paradigm tables)**
+   URL pattern: `https://en.wiktionary.org/wiki/<noun>`
+   Look under the "Danish" section → Declension table.
+
+3. **Sproget.dk (official language advice)**
+   `https://sproget.dk`
+
+---
+
+## Consonant Doubling Reference
+
+Doubling applies when: **single consonant follows a short, stressed vowel**, before a vowel-initial suffix (-en, -et, -er, -e, -ene).
+
+| Noun  | Doubles? | Result             |
+|-------|----------|--------------------|
+| kat   | yes      | katten / katte     |
+| ven   | yes      | vennen / venner    |
+| glas  | yes      | glasset / glassene |
+| æg    | yes      | ægget / æggene     |
+| hund  | no (nd)  | hunden / hunde     |
+| bog   | no (og)  | bogen              |
+
+---
+
+## Common Mistakes to Avoid
+
+| Wrong              | Right             | Why                                      |
+|--------------------|-------------------|------------------------------------------|
+| kat → kater        | katte             | consonant doubling + -e class            |
+| glas → glaser      | glas              | zero plural                              |
+| barn → barnen      | barnet            | et-noun                                  |
+| børn → børnerne    | børnene           | def plural = plural (børn) + -ene        |
+| museum → museumet  | museet            | Latin -um drops before -et               |
+| blomst → blomsterene | blomsterne      | -er plural → add -ne, not -ene           |
+| år → årsene        | årene             | zero plural + -ene (not års-)            |
+| finger → fingerer  | fingre            | syncopation: finger → fingr + e          |
+
+---
+
+## Distribution Requirements
+
+The exercise logic automatically handles these — just make sure the data has enough nouns:
+- **Gender exercise**: algorithm picks ~60% `et` nouns, ~40% `en` nouns from the pool
+- **Plural class exercise**: 30% `er`, 30% `e`, 40% across `zero`/`umlaut`/`irregular`
+
+To support 10-question sessions, each category should ideally have at least:
+- 6+ `er` nouns with pluralClass not null
+- 6+ `e` nouns
+- 2+ `zero`, 2+ `umlaut`, 1+ `irregular`
+- A mix of `en` and `et` nouns
+
+---
+
+## Example Entry
+
+```js
+{ id: 189, category: 'animals', da: 'løve', meaning: 'lion', gender: 'en',
+  definiteSg: 'løven', plural: 'løver', definitePl: 'løverne', pluralClass: 'er' },
+```

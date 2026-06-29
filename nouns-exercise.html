@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Nouns Exercise | Danish Practice</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- ── Exercise View ────────────────────────────────────────── -->
+  <div id="exercise-view">
+
+    <!-- Progress header -->
+    <div class="progress-header">
+      <button class="back-btn" onclick="confirmBack()" aria-label="Back">←</button>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <span class="progress-text" id="progress-text">1 / 10</span>
+    </div>
+
+    <!-- Timer bar (hidden when no time limit) -->
+    <div class="timer-bar" id="timer-bar" style="display:none">
+      <div class="timer-fill" id="timer-fill" style="width:100%"></div>
+    </div>
+
+    <!-- Question -->
+    <div class="question-card">
+      <div class="question-prompt" id="question-prompt"></div>
+      <div class="question-text"  id="question-text"></div>
+    </div>
+
+    <!-- Answer buttons (built dynamically) -->
+    <div class="answer-grid" id="answer-grid"></div>
+
+  </div><!-- /exercise-view -->
+
+  <!-- ── Feedback Overlay ──────────────────────────────────────── -->
+  <div class="feedback-overlay hidden" id="feedback-overlay" onclick="nextQuestion()">
+    <div class="feedback-icon"     id="feedback-icon"></div>
+    <div class="feedback-title"    id="feedback-title"></div>
+    <div class="feedback-subtitle" id="feedback-subtitle"></div>
+    <div class="feedback-correct"  id="feedback-correct"></div>
+
+    <!-- Noun info card (all exercises) -->
+    <div id="noun-info-container" style="display:none"></div>
+
+    <!-- TTS play button -->
+    <button id="tts-btn" class="tts-btn" onclick="event.stopPropagation(); playTTS()" aria-label="Hear pronunciation">
+      🔊
+    </button>
+    <span id="tts-noun-label" class="tts-verb-label"></span>
+
+    <div class="feedback-tap">Tap anywhere else to continue</div>
+  </div>
+
+  <!-- ── Summary View ─────────────────────────────────────────── -->
+  <div id="summary-view" style="display:none">
+
+    <div class="header" style="padding-top:20px">
+      <a href="nouns-config.html" class="back-btn" aria-label="Back">←</a>
+      <div class="page-title">Results</div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px;padding:24px 0 40px">
+
+      <div class="score-circle">
+        <span class="score-number" id="score-number">0</span>
+        <span class="score-total"  id="score-total">/ 10</span>
+      </div>
+
+      <div class="score-pct" id="score-pct">0%</div>
+      <div class="summary-msg" id="summary-msg"></div>
+
+      <div class="summary-actions">
+        <button class="start-btn" onclick="playAgain()">Play Again →</button>
+        <a href="nouns-config.html" class="btn-secondary">Change Settings</a>
+        <a href="index.html"        class="btn-secondary">Home</a>
+      </div>
+
+    </div>
+  </div><!-- /summary-view -->
+
+  <!-- Data + Logic -->
+  <script src="js/nouns-data.js"></script>
+  <script src="js/nouns-exercise.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      initNounsExercise();
+      twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+    });
+
+    function confirmBack() {
+      if (confirm('Leave this exercise? Your progress will be lost.')) {
+        window.location.href = 'nouns-config.html';
+      }
+    }
+
+    function playAgain() {
+      window.location.href = 'nouns-exercise.html';
+    }
+  </script>
+</body>
+</html>
