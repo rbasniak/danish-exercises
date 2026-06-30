@@ -20,84 +20,17 @@
 
   <p class="intro-text">Configure your practice session below, then tap Start.</p>
 
-  <!-- ── Category ─────────────────────────────────────────────── -->
+  <!-- ── Categories ───────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-title">Category</div>
-    <div class="radio-group" id="grp-category">
-
-      <label class="radio-option selected">
-        <input type="radio" name="category" value="animals" checked />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">🐾 Animals</span>
-        </div>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="category" value="food" />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">🍎 Food &amp; drink</span>
-        </div>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="category" value="body" />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">🫀 Body &amp; health</span>
-        </div>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="category" value="home" />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">🏠 Home &amp; objects</span>
-        </div>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="category" value="nature" />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">🌿 Nature</span>
-        </div>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="category" value="people" />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">👥 People &amp; relationships</span>
-        </div>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="category" value="work" />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">💼 Work &amp; places</span>
-        </div>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="category" value="time" />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">🕐 Time &amp; calendar</span>
-        </div>
-      </label>
-
-      <label class="radio-option">
-        <input type="radio" name="category" value="abstract" />
-        <div class="radio-dot"></div>
-        <div class="radio-text">
-          <span class="radio-label">💭 Abstract &amp; common</span>
-        </div>
-      </label>
-
+    <div class="section-title-row">
+      <div class="section-title">Categories</div>
+      <div class="section-actions">
+        <button type="button" class="link-btn" id="select-all-categories">All</button>
+        <button type="button" class="link-btn" id="clear-categories">Clear</button>
+      </div>
     </div>
+    <p class="section-hint">Select one or more — questions are drawn from your chosen categories.</p>
+    <div class="checkbox-group scrollable" id="grp-category"></div>
   </div>
 
   <!-- ── Exercise Type ────────────────────────────────────────── -->
@@ -238,17 +171,58 @@
 
   <button class="start-btn" id="start-btn" onclick="startExercise()">Start Practice →</button>
 
+  <script src="js/nouns-data.js"></script>
   <script>
+    function buildCategoryOptions() {
+      const group = document.getElementById('grp-category');
+      group.innerHTML = NOUN_CATEGORIES.map((cat, i) => `
+        <label class="checkbox-option${i === 0 ? ' selected' : ''}">
+          <input type="checkbox" name="category" value="${cat.id}"${i === 0 ? ' checked' : ''} />
+          <div class="checkbox-box"></div>
+          <div class="radio-text">
+            <span class="radio-label">${cat.emoji} ${cat.label}</span>
+          </div>
+        </label>
+      `).join('');
+
+      group.querySelectorAll('.checkbox-option').forEach(opt => {
+        const checkbox = opt.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', () => {
+          opt.classList.toggle('selected', checkbox.checked);
+        });
+      });
+    }
+
+    function setAllCategories(checked) {
+      document.querySelectorAll('#grp-category .checkbox-option').forEach(opt => {
+        const checkbox = opt.querySelector('input[type="checkbox"]');
+        if (!checkbox) {
+          return;
+        }
+        checkbox.checked = checked;
+        opt.classList.toggle('selected', checked);
+      });
+    }
+
     document.querySelectorAll('.radio-group').forEach(group => {
       group.querySelectorAll('.radio-option:not(.disabled)').forEach(opt => {
         opt.addEventListener('click', () => {
           const radio = opt.querySelector('input[type="radio"]');
-          if (!radio || radio.disabled) return;
+          if (!radio || radio.disabled) {
+            return;
+          }
           radio.checked = true;
           group.querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
           opt.classList.add('selected');
         });
       });
+    });
+
+    document.getElementById('select-all-categories').addEventListener('click', () => {
+      setAllCategories(true);
+    });
+    document.getElementById('clear-categories').addEventListener('click', () => {
+      setAllCategories(false);
     });
 
     function startExercise() {
@@ -257,8 +231,16 @@
         return el ? el.value : null;
       };
 
+      const categories = [...document.querySelectorAll('input[name="category"]:checked')]
+        .map(el => el.value);
+
+      if (categories.length === 0) {
+        alert('Please select at least one category.');
+        return;
+      }
+
       const config = {
-        category:     get('category')  || 'animals',
+        categories,
         exerciseType: get('extype')    || 'en-to-da',
         count:        get('count')     || '10',
         timeLimit:    get('timelimit') || '0',
@@ -269,6 +251,7 @@
       window.location.href = 'nouns-exercise.html';
     }
 
+    buildCategoryOptions();
     twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
   </script>
 </body>
